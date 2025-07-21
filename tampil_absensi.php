@@ -4,7 +4,7 @@ include 'config.php';
 $startDate = isset($_GET['startDate']) ? $_GET['startDate'] : '';
 $endDate = isset($_GET['endDate']) ? $_GET['endDate'] : '';
 
-$sql = "SELECT id, nama_guru, tanggal, hari, jam_masuk, foto_masuk, jam_keluar, foto_keluar FROM absensi";
+$sql = "SELECT id, nama_guru, tanggal, hari, jam_masuk, foto_masuk, jam_keluar, foto_keluar, nip, status_pegawai FROM absensi";
 
 if (!empty($startDate) && !empty($endDate)) {
     $sql .= " WHERE tanggal BETWEEN '$startDate' AND '$endDate'";

@@ -117,12 +117,26 @@
           <div id="my_camera"></div>
           <button type="button" class="camera-btn mb-3" onclick="takeSnapshot()">Ambil Foto</button>
           <input type="hidden" name="image_data" id="image_data">
-
           <div id="results" class="mb-3 text-center"></div>
 
           <div class="mb-3">
+            <label class="form-label">Cari Nama atau NIP</label>
+            <input type="text" id="search_guru" class="form-control" placeholder="Ketik Nama atau NIP...">
+          </div>
+
+          <div class="mb-3">
             <label class="form-label">Nama Guru</label>
-            <input type="text" name="nama_guru" class="form-control" required>
+            <input type="text" name="nama_guru" id="nama_guru" class="form-control" readonly>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">NIP</label>
+            <input type="text" name="nip" id="nip" class="form-control" readonly>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Status Pegawai</label>
+            <input type="text" name="status_pegawai" id="status_pegawai" class="form-control" readonly>
           </div>
 
           <div class="mb-3">
@@ -155,7 +169,6 @@
           <button type="submit" class="submit-btn">Submit Absensi</button>
         </form>
 
-        <!-- Modal Notifikasi -->
         <div class="modal fade" id="modalNotif" tabindex="-1" aria-labelledby="modalNotifLabel" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -178,12 +191,10 @@
   </div>
 </div>
 
-<!-- Script Section -->
-<!-- Bootstrap JS Bundle (fix for modal error) -->
+<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-  // Tampilkan webcam
   Webcam.set({
     width: 320,
     height: 240,
@@ -202,7 +213,6 @@
     });
   }
 
-  // Update waktu realtime
   function updateWaktu() {
     const now = new Date();
     document.getElementById('hari').value = now.toLocaleDateString('id-ID', { weekday: 'long' });
@@ -212,17 +222,14 @@
   setInterval(updateWaktu, 1000);
   updateWaktu();
 
-  // Submit AJAX
   document.getElementById("formAbsen").addEventListener("submit", function(e) {
     e.preventDefault();
-
     if (!document.getElementById("image_data").value) {
       alert("Silakan ambil foto terlebih dahulu!");
       return;
     }
 
     const formData = new FormData(this);
-
     fetch('proses_absen.php', {
       method: 'POST',
       body: formData
@@ -235,6 +242,27 @@
     .catch(err => {
       alert("Gagal mengirim data: " + err);
     });
+  });
+
+  document.getElementById("search_guru").addEventListener("input", function () {
+    const query = this.value.trim();
+    if (query.length < 3) return;
+    fetch(`cari_guru.php?q=${encodeURIComponent(query)}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data && data.nama_guru) {
+          document.getElementById("nama_guru").value = data.nama_guru;
+          document.getElementById("nip").value = data.nip;
+          document.getElementById("status_pegawai").value = data.status_pegawai;
+        } else {
+          document.getElementById("nama_guru").value = '';
+          document.getElementById("nip").value = '';
+          document.getElementById("status_pegawai").value = '';
+        }
+      })
+      .catch(err => {
+        console.error("Gagal mengambil data guru:", err);
+      });
   });
 </script>
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Form Absensi Guru - GARIS</title>
+  <title>Formulir Buku Tamu - GARIS</title>
 
   <!-- Bootstrap 5 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -130,6 +130,10 @@
       border: 3px solid #4e73df;
     }
     
+    #results {
+      margin-top: 15px;
+    }
+    
     #results img {
       border-radius: 10px;
       border: 3px solid #4e73df;
@@ -205,7 +209,7 @@
   <div class="row main-box">
     
     <!-- Kiri: Gambar -->
-    <div class="col-md-7 left-col">
+    <div class="col-md-6 left-col">
       <div class="left-col-content">
         <h2>Selamat Datang</h2>
         <p>Terima kasih telah mengunjungi kami. Silakan isi buku tamu digital ini.</p>
@@ -213,10 +217,12 @@
     </div>
 
     <!-- Kanan: Form -->
-    <div class="col-md-5 form-container">
+    <div class="col-md-6 form-container">
       <a href="index.php" class="back-btn"><i class="fas fa-arrow-left"></i>Kembali ke Beranda</a>
       <h3>Buku Tamu</h3>
       <form id="bukutamu-form" method="POST">
+
+
         <div class="mb-3">
           <label for="nama" class="form-label">Nama Lengkap</label>
           <input type="text" class="form-control" name="nama" id="nama" required>
@@ -242,7 +248,7 @@
         </div>
 
         <div class="mb-3">
-          <label for="instansi_input" class="form-label">Asal</label>
+          <label for="instansi" class="form-label">Asal</label>
           <input type="text" class="form-control" name="instansi" id="instansi_input" placeholder="Nama Instansi / Sekolah / Organisasi" required>
         </div>
 
@@ -262,7 +268,7 @@
             <i class="fas fa-camera me-2"></i>Ambil Foto
           </button>
           <input type="hidden" name="foto" id="foto">
-          <div id="results" class="mt-3"></div>
+          <div id="results"></div>
         </div>
 
         <button type="submit" class="submit-btn">
@@ -311,23 +317,20 @@
 
   function takeSnapshot() {
     Webcam.snap(function(data_uri) {
-      const resultDiv = document.getElementById('results');
-      resultDiv.innerHTML = `
-        <img src="${data_uri}" class="img-thumbnail mt-2" style="max-width: 100%; border: 3px solid #4e73df;" />
-        <p class="mt-2 fw-semibold text-success">Foto berhasil diambil.</p>
-      `;
+      document.getElementById('results').innerHTML = '<img src="' + data_uri + '" class="img-fluid"/>';
       document.getElementById('foto').value = data_uri;
     });
   }
 
   document.getElementById('bukutamu-form').addEventListener('submit', function(event) {
     event.preventDefault();
-
+    
+    // Validasi apakah foto sudah diambil
     if (!document.getElementById('foto').value) {
       alert('Silakan ambil foto terlebih dahulu!');
       return false;
     }
-
+    
     let formData = new FormData(this);
 
     fetch('simpan_bukutamu.php', {

@@ -226,6 +226,8 @@
               <tr>
                 <th>Tanggal</th>
                 <th>Nama Guru</th>
+                <th>NIP</th>
+                <th>Status Pegawai</th>
                 <th>Hari</th>
                 <th>Jam Masuk</th>
                 <th>Jam Keluar</th>
@@ -274,6 +276,8 @@
             dataTable.row.add([
               row.tanggal,
               row.nama_guru,
+              row.nip,
+              row.status_pegawai,
               row.hari,
               row.jam_masuk ?? '-',
               row.jam_keluar ?? '-',

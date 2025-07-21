@@ -2,6 +2,8 @@
 require 'config.php';
 
 $nama_guru = $_POST['nama_guru'] ?? '';
+$nip = $_POST['nip'] ?? '';
+$status_pegawai = $_POST['status_pegawai'] ?? '';
 $status_absen = $_POST['status_absen'] ?? '';
 $image_data = $_POST['image_data'] ?? '';
 
@@ -39,7 +41,7 @@ $result = $cek->get_result();
 
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    
+
     if ($status_absen == 'masuk') {
         if (!empty($row['jam_masuk'])) {
             echo "Anda sudah absen masuk hari ini.";
@@ -64,17 +66,17 @@ if ($result->num_rows > 0) {
 } else {
     // Belum ada data, maka insert sesuai status
     if ($status_absen == 'masuk') {
-        $sql = "INSERT INTO absensi (nama_guru, tanggal, hari, jam_masuk, foto_masuk)
-                VALUES (?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO absensi (nama_guru, nip, status_pegawai, tanggal, hari, jam_masuk, foto_masuk)
+                VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sssss", $nama_guru, $tanggal, $hari, $jam, $foto_path);
+        $stmt->bind_param("sssssss", $nama_guru, $nip, $status_pegawai, $tanggal, $hari, $jam, $foto_path);
         $stmt->execute();
         echo "Absen masuk berhasil dicatat.";
     } elseif ($status_absen == 'pulang') {
-        $sql = "INSERT INTO absensi (nama_guru, tanggal, hari, jam_keluar, foto_keluar)
-                VALUES (?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO absensi (nama_guru, nip, status_pegawai, tanggal, hari, jam_keluar, foto_keluar)
+                VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sssss", $nama_guru, $tanggal, $hari, $jam, $foto_path);
+        $stmt->bind_param("sssssss", $nama_guru, $nip, $status_pegawai, $tanggal, $hari, $jam, $foto_path);
         $stmt->execute();
         echo "Absen pulang berhasil dicatat.";
     }
