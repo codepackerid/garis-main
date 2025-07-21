@@ -33,7 +33,7 @@
       margin: 0;
     }
     .left-col {
-      background: url('flyergkp.png') no-repeat center center;
+      background: url('gambar sekolah.jpg') no-repeat center center;
       background-size: cover;
       position: relative;
       min-height: 500px;
@@ -114,6 +114,12 @@
       <div class="form-container">
         <h3 class="text-center mb-4">Form Absensi</h3>
         <form id="formAbsen" method="POST" action="proses_absen.php">
+
+          <div class="mb-3">
+            <label class="form-label"></label>
+            <input type="text" name="jam" id="jam" class="form-control" readonly>
+          </div>
+
           <div id="my_camera"></div>
           <button type="button" class="camera-btn mb-3" onclick="takeSnapshot()">Ambil Foto</button>
           <input type="hidden" name="image_data" id="image_data">
@@ -147,11 +153,6 @@
           <div class="mb-3">
             <label class="form-label">Hari</label>
             <input type="text" name="hari" id="hari" class="form-control" readonly>
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Jam</label>
-            <input type="text" name="jam" id="jam" class="form-control" readonly>
           </div>
 
           <div class="mb-3">
