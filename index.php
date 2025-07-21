@@ -111,7 +111,7 @@
     <div class="container">
         <div class="card">
             <img src="assets/img/logo-grafika.png" alt="Logo GARIS" class="logo-img">
-            <h2 class="fw-bold">Grafika Apresiasi Silaturahmi</h2>
+            <h2 class="fw-bold">Grafika Absen Rapi Informatif Sistematis</h2>
             <p class="tagline">Selamat datang di buku tamu digital GARIS.</p>
             <a href="form.php" class="btn btn-light btn-custom">
                 <i class="fas fa-edit btn-icon"></i>Isi Buku Tamu

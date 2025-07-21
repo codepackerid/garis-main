@@ -221,7 +221,7 @@
         <div class="logo-container">
             <img src="assets/img/logo-grafika.png" alt="Logo GARIS">
             <div class="logo-text">
-                <h2>Grafika Apresiasi Silaturahmi</h2>
+                <h2>Grafika Absen Rapi Informatif dan Sistematis</h2>
                 <h2>GARIS</h2>
             </div>
         </div>

@@ -26,7 +26,7 @@
       border-radius: 20px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
       overflow: hidden;
-      max-width: 1000px;
+      max-width: 1300px;
       width: 100%;
     }
     .row.no-gutters {
@@ -42,7 +42,7 @@
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(37, 37, 37, 0.5);
     }
     .left-col-content {
       position: relative;
@@ -62,19 +62,43 @@
     .form-container {
       padding: 30px;
     }
+
+        .back-btn {
+      display: inline-flex;
+      align-items: center;
+      color: #4e73df;
+      text-decoration: none;
+      font-weight: 600;
+      margin-bottom: 20px;
+      transition: all 0.3s;
+    }
+    
+    .back-btn i {
+      margin-right: 8px;
+    }
+    
+    .back-btn:hover {
+      transform: translateX(-3px);
+      color: #6610f2;
+    }
+
     #my_camera {
-      width: 100%;
-      height: auto;
+      width: 320px;
+      height: 240px;
+      margin: 0 auto;
       border-radius: 10px;
       overflow: hidden;
       border: 3px solid #4e73df;
-      margin-bottom: 10px;
     }
     #results img {
       max-width: 100%;
       border: 3px solid #4e73df;
       border-radius: 10px;
     }
+    .readonly-look {
+  background-color: #e9ecef !important; /* warna abu seperti disabled */
+  cursor: not-allowed; /* pointer menunjukkan tidak bisa diklik */
+  }
     .camera-btn, .submit-btn {
       background: linear-gradient(135deg, #4e73df 0%, #6610f2 100%);
       color: white;
@@ -82,6 +106,7 @@
       border: none;
       padding: 10px 20px;
       border-radius: 50px;
+            margin-top: 10px;
       transition: all 0.3s;
       width: 100%;
     }
@@ -112,13 +137,26 @@
     </div>
     <div class="col-md-5">
       <div class="form-container">
-        <h3 class="text-center mb-4">Form Absensi</h3>
+
+       <a href="index.php" class="back-btn"><i class="fas fa-arrow-left"></i>Kembali ke Beranda</a>
+       
+        <h3 class="text-center mb-0">Form Absensi</h3>
         <form id="formAbsen" method="POST" action="proses_absen.php">
 
-          <div class="mb-3">
-            <label class="form-label"></label>
-            <input type="text" name="jam" id="jam" class="form-control" readonly>
-          </div>
+<div class="row mb-3">
+  <div class="col-md-4">
+    <label class="form-label"></label>
+    <input type="text" name="tanggal" id="tanggal" class="form-control text-start border-0 bg-transparent" readonly>
+  </div>
+  <div class="col-md-4">
+    <label class="form-label"></label>
+    <input type="text" name="hari" id="hari" class="form-control text-center border-0 bg-transparent" readonly>
+  </div>
+  <div class="col-md-4">
+    <label class="form-label"></label>
+    <input type="text" name="jam" id="jam" class="form-control text-end border-0 bg-transparent" readonly>
+  </div>
+</div>
 
           <div id="my_camera"></div>
           <button type="button" class="camera-btn mb-3" onclick="takeSnapshot()">Ambil Foto</button>
@@ -132,27 +170,17 @@
 
           <div class="mb-3">
             <label class="form-label">Nama Guru</label>
-            <input type="text" name="nama_guru" id="nama_guru" class="form-control" readonly>
+            <input type="text" name="nama_guru" id="nama_guru" class="form-control readonly-look" readonly>
           </div>
 
           <div class="mb-3">
             <label class="form-label">NIP</label>
-            <input type="text" name="nip" id="nip" class="form-control" readonly>
+            <input type="text" name="nip" id="nip" class="form-control readonly-look" readonly>
           </div>
 
           <div class="mb-3">
             <label class="form-label">Status Pegawai</label>
-            <input type="text" name="status_pegawai" id="status_pegawai" class="form-control" readonly>
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Tanggal</label>
-            <input type="text" name="tanggal" id="tanggal" class="form-control" readonly>
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">Hari</label>
-            <input type="text" name="hari" id="hari" class="form-control" readonly>
+            <input type="text" name="status_pegawai" id="status_pegawai" class="form-control readonly-look" readonly>
           </div>
 
           <div class="mb-3">

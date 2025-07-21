@@ -29,7 +29,7 @@
     }
 
     .left-col {
-      background: url('flyergkp.png') no-repeat center center;
+      background: url('gambar sekolah.jpg') no-repeat center center;
       background-size: cover;
       min-height: 600px;
       position: relative;
