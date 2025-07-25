@@ -1,67 +1,79 @@
 <?php
-include 'config.php';
+require 'vendor/autoload.php'; // pastikan path Composer sudah benar
+require 'config.php'; // koneksi ke database
 
-header("Content-Type: application/vnd.ms-excel");
-header("Content-Disposition: attachment; filename=export_data.xls");
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
-$type = $_GET['type'] ?? 'bukutamu';
+// Ambil parameter tanggal jika ada
 $startDate = $_GET['startDate'] ?? '';
 $endDate = $_GET['endDate'] ?? '';
 
-echo "<table border='1'>";
+// Query data absensi
+$sql = "SELECT * FROM absensi WHERE 1=1";
+if ($startDate && $endDate) {
+    $sql .= " AND tanggal BETWEEN '$startDate' AND '$endDate'";
+}
+$sql .= " ORDER BY tanggal DESC";
+$result = $conn->query($sql);
 
-if ($type === 'absensi') {
-    echo "<tr>
-            <th>Tanggal</th>
-            <th>Nama Guru</th>
-            <th>Hari</th>
-            <th>Jam Masuk</th>
-            <th>Jam Keluar</th>
-          </tr>";
+// Buat spreadsheet baru
+$spreadsheet = new Spreadsheet();
+$sheet = $spreadsheet->getActiveSheet();
+$sheet->setTitle('Data Absensi');
 
-    $sql = "SELECT a.*, g.nama FROM absensi a 
-            LEFT JOIN guru g ON a.id_guru = g.id";
+// Header kolom
+$headers = ['Tanggal', 'Nama Guru', 'NIP', 'Status Pegawai', 'Hari', 'Jam Masuk', 'Jam Keluar', 'Foto Masuk', 'Foto Keluar'];
+$sheet->fromArray($headers, NULL, 'A1');
 
-    if (!empty($startDate) && !empty($endDate)) {
-        $sql .= " WHERE a.tanggal BETWEEN '$startDate' AND '$endDate'";
+// Mulai dari baris ke-2
+$rowNum = 2;
+
+while ($row = $result->fetch_assoc()) {
+    // Isi data teks
+    $sheet->setCellValue("A{$rowNum}", $row['tanggal']);
+    $sheet->setCellValue("B{$rowNum}", $row['nama_guru']);
+    $sheet->setCellValue("C{$rowNum}", $row['nip']);
+    $sheet->setCellValue("D{$rowNum}", $row['status_pegawai']);
+    $sheet->setCellValue("E{$rowNum}", $row['hari']);
+    $sheet->setCellValue("F{$rowNum}", $row['jam_masuk']);
+    $sheet->setCellValue("G{$rowNum}", $row['jam_keluar']);
+
+    // Tambahkan Foto Masuk jika ada
+    if (!empty($row['foto_masuk']) && file_exists($row['foto_masuk'])) {
+        $drawingMasuk = new Drawing();
+        $drawingMasuk->setPath($row['foto_masuk']);
+        $drawingMasuk->setCoordinates("H{$rowNum}");
+        $drawingMasuk->setHeight(60);
+        $drawingMasuk->setWorksheet($sheet);
     }
 
-    $result = $conn->query($sql);
-    while ($row = $result->fetch_assoc()) {
-        echo "<tr>
-                <td>{$row['tanggal']}</td>
-                <td>{$row['nama']}</td>
-                <td>{$row['hari']}</td>
-                <td>{$row['jam_masuk']}</td>
-                <td>{$row['jam_keluar']}</td>
-              </tr>";
-    }
-} else {
-    echo "<tr>
-            <th>Nama</th>
-            <th>Tujuan</th>
-            <th>Asal</th>
-            <th>Keperluan</th>
-            <th>Tanggal</th>
-            <th>Waktu</th>
-          </tr>";
-
-    $sql = "SELECT * FROM buku_tamu";
-    if (!empty($startDate) && !empty($endDate)) {
-        $sql .= " WHERE tanggal_kunjungan BETWEEN '$startDate' AND '$endDate'";
+    // Tambahkan Foto Keluar jika ada
+    if (!empty($row['foto_keluar']) && file_exists($row['foto_keluar'])) {
+        $drawingKeluar = new Drawing();
+        $drawingKeluar->setPath($row['foto_keluar']);
+        $drawingKeluar->setCoordinates("I{$rowNum}");
+        $drawingKeluar->setHeight(60);
+        $drawingKeluar->setWorksheet($sheet);
     }
 
-    $result = $conn->query($sql);
-    while ($row = $result->fetch_assoc()) {
-        echo "<tr>
-                <td>{$row['nama']}</td>
-                <td>{$row['tujuan']}</td>
-                <td>{$row['asal']}</td>
-                <td>{$row['keperluan']}</td>
-                <td>{$row['tanggal_kunjungan']}</td>
-                <td>{$row['waktu_kunjungan']}</td>
-              </tr>";
-    }
+    // Tinggi baris agar gambar muat
+    $sheet->getRowDimension($rowNum)->setRowHeight(70);
+
+    $rowNum++;
 }
 
-echo "</table>";
+// Set auto-width kolom
+foreach (range('A', 'I') as $col) {
+    $sheet->getColumnDimension($col)->setAutoSize(true);
+}
+
+// Output sebagai file download
+header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+header('Content-Disposition: attachment;filename="absensi_guru.xlsx"');
+header('Cache-Control: max-age=0');
+
+$writer = new Xlsx($spreadsheet);
+$writer->save('php://output');
+exit;

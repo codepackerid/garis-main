@@ -587,42 +587,44 @@
     let dataTable;
 
     // Fungsi untuk load data absensi
-    function loadAbsensi(startDate = '', endDate = '') {
-      $.ajax({
-        url: 'tampil_absensi.php',
-        method: 'GET',
-        data: {
-          startDate: startDate,
-          endDate: endDate
-        },
-        dataType: 'json',
-        success: function (data) {
-          if (dataTable) {
-            dataTable.clear().draw();
-          } else {
-            dataTable = $('#absensiTable').DataTable({
-              responsive: true
-            });
-          }
+   function loadAbsensi(startDate = '', endDate = '') {
+  $.ajax({
+    url: 'tampil_absensi.php',
+    method: 'GET',
+    data: {
+      startDate: startDate,
+      endDate: endDate
+    },
+    dataType: 'json',
+    success: function (data) {
+      if (dataTable) {
+        dataTable.clear().draw();
+      } else {
+        dataTable = $('#absensiTable').DataTable({
+          responsive: true,
+          dom: 'Bfrtip', // <-- Tambahkan ini
+          buttons: ['excel'] // <-- Tambahkan ini
+        });
+      }
 
-          data.forEach(row => {
-            dataTable.row.add([
-              `<span class="table-date">${formatDateShort(row.tanggal)}</span>`,
-              `<span class="table-name">${row.nama_guru}</span>`,
-              `<span class="table-nip">${row.nip || '-'}</span>`,
-              `<span class="table-status ${row.status_pegawai.toLowerCase()}">${row.status_pegawai}</span>`,
-              `<span class="table-day">${row.hari}</span>`,
-              `<span class="table-time">${row.jam_masuk || '-'}</span>`,
-              `<span class="table-time">${row.jam_keluar || '-'}</span>`,
-              row.foto_masuk ? `<img src="${row.foto_masuk}" class="table-photo" alt="Foto Masuk ${row.nama_guru}" onclick="showPhotoModal('${row.foto_masuk}', '${row.nama_guru} - Masuk')">` : '<span style="color: rgba(0,0,0,0.3);">-</span>',
-              row.foto_keluar ? `<img src="${row.foto_keluar}" class="table-photo" alt="Foto Keluar ${row.nama_guru}" onclick="showPhotoModal('${row.foto_keluar}', '${row.nama_guru} - Keluar')">` : '<span style="color: rgba(0,0,0,0.3);">-</span>'
-            ]);
-          });
-
-          dataTable.draw();
-        }
+      data.forEach(row => {
+        dataTable.row.add([
+          `<span class="table-date">${formatDateShort(row.tanggal)}</span>`,
+          `<span class="table-name">${row.nama_guru}</span>`,
+          `<span class="table-nip">${row.nip || '-'}</span>`,
+          `<span class="table-status ${row.status_pegawai.toLowerCase()}">${row.status_pegawai}</span>`,
+          `<span class="table-day">${row.hari}</span>`,
+          `<span class="table-time">${row.jam_masuk || '-'}</span>`,
+          `<span class="table-time">${row.jam_keluar || '-'}</span>`,
+          row.foto_masuk ? `<img src="${row.foto_masuk}" class="table-photo" alt="Foto Masuk ${row.nama_guru}" onclick="showPhotoModal('${row.foto_masuk}', '${row.nama_guru} - Masuk')">` : '<span style="color: rgba(0,0,0,0.3);">-</span>',
+          row.foto_keluar ? `<img src="${row.foto_keluar}" class="table-photo" alt="Foto Keluar ${row.nama_guru}" onclick="showPhotoModal('${row.foto_keluar}', '${row.nama_guru} - Keluar')">` : '<span style="color: rgba(0,0,0,0.3);">-</span>'
+        ]);
       });
+
+      dataTable.draw();
     }
+  });
+}
 
     // Tombol filter
     $('#filterBtn').click(function () {
@@ -631,10 +633,12 @@
       loadAbsensi(start, end);
     });
 
-    // Tombol export
-    $('#exportBtn').click(function () {
-      $('.buttons-excel').click();
-    });
+$('#exportBtn').click(function () {
+  const start = $('#startDate').val();
+  const end = $('#endDate').val();
+  const url = `export_excel.php?startDate=${start}&endDate=${end}`;
+  window.open(url, '_blank');
+});
 
     // Format tanggal pendek untuk tabel
     function formatDateShort(dateString) {
