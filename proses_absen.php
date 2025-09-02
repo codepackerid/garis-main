@@ -73,13 +73,14 @@ if ($result->num_rows > 0) {
         $stmt->bind_param("sssssss", $nama_guru, $nip, $status_pegawai, $tanggal, $hari, $jam, $foto_path);
         $stmt->execute();
         echo "Absen masuk berhasil dicatat.";
-    } elseif ($status_absen == 'pulang') {
-        $sql = "INSERT INTO absensi (nama_guru, nip, status_pegawai, tanggal, hari, jam_keluar, foto_keluar)
-                VALUES (?, ?, ?, ?, ?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sssssss", $nama_guru, $nip, $status_pegawai, $tanggal, $hari, $jam, $foto_path);
-        $stmt->execute();
-        echo "Absen pulang berhasil dicatat.";
-    }
+} elseif ($status_absen == 'pulang') {
+    // Guru belum absen sama sekali hari ini, maka catat sebagai absen masuk saja
+    $sql = "INSERT INTO absensi (nama_guru, nip, status_pegawai, tanggal, hari, jam_masuk, foto_masuk)
+            VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("sssssss", $nama_guru, $nip, $status_pegawai, $tanggal, $hari, $jam, $foto_path);
+    $stmt->execute();
+    echo "Karena Anda belum absen masuk, sistem mencatatnya sebagai absen masuk.";
+}
 }
 ?>

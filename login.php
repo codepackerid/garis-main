@@ -1,16 +1,9 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>GARIS - Buku Tamu</title>
-
-    <!-- Bootstrap 5 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masuk ke Halaman</title>
     <style>
         /* ======= Reset & Base Styles ======= */
         * {
@@ -358,55 +351,53 @@
         }
     </style>
 </head>
-
 <body>
     <div class="main-container">
-        <!-- Header Section -->
         <div class="header-section">
             <div class="logo-container">
-                <img src="assets/img/logo-grafika.png" alt="Logo GARIS" class="logo-img">
+                <img src="logo.png" alt="Logo" class="logo-img">
             </div>
             <div class="title-section">
-                <h1>Grafika Absen Rapi Informatif Sistematis</h1>
-                <div class="acronym">(GARIS)</div>
-                <p class="tagline">Selamat datang di buku tamu digital GARIS.</p>
+                <h1>Selamat Datang</h1>
+                <div class="acronym">Akses Halaman Khusus</div>
+                <div class="tagline">Silakan masukkan password untuk melanjutkan.</div>
             </div>
         </div>
 
-        <!-- Menu Section -->
         <div class="menu-section">
-            <div class="menu-grid">
-                <a href="form.php" class="menu-item">
-                    <div class="menu-icon">
-                        <i class="fas fa-edit"></i>
+            <form onsubmit="return checkPassword()" style="width: 100%;">
+                <div class="menu-grid">
+                    <div class="menu-item" style="grid-column: span 2;">
+                        <div class="menu-icon">🔒</div>
+                        <input type="password" id="password" placeholder="Masukkan Password" required 
+                               style="border: none; background: transparent; width: 100%; font-size: 1rem;">
                     </div>
-                    <div class="menu-text">Isi Buku Tamu</div>
-                </a>
-                
-                <a href="form_guru.php" class="menu-item">
-                    <div class="menu-icon">
-                        <i class="fas fa-user-check"></i>
+                    <div class="menu-item" style="grid-column: span 2; justify-content: center;">
+                        <button type="submit" 
+                                style="all: unset; cursor: pointer; color: inherit; font-weight: 600;">
+                            🔐 Masuk
+                        </button>
                     </div>
-                    <div class="menu-text">Isi Absen Guru</div>
-                </a>
-                
-                <a href="login.php" class="menu-item">
-                    <div class="menu-icon">
-                        <i class="fas fa-table"></i>
-                    </div>
-                    <div class="menu-text">Login Admin Page</div>
-                </a>
-            </div>
+                </div>
+            </form>
         </div>
 
-        <!-- Footer -->
-        <div class="footer">
-            &copy; 2025 GARIS - Grafika Apresiasi Silaturahmi
-        </div>
+        <div class="footer">© <?= date('Y') ?> Sistem Akses Halaman</div>
     </div>
 
-    <!-- Bootstrap 5 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+    <script>
+        function checkPassword() {
+            const input = document.getElementById("password").value;
+            const correctPassword = "inioperator123"; // Ganti dengan password yang kamu inginkan
 
+            if (input === correctPassword) {
+                window.location.href = "index_admin.php"; // Tujuan jika benar
+                return false;
+            } else {
+                alert("Password salah!");
+                return false;
+            }
+        }
+    </script>
+</body>
 </html>

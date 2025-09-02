@@ -566,6 +566,7 @@
                 <th>Jam Keluar</th>
                 <th>Foto Masuk</th>
                 <th>Foto Keluar</th>
+                <th>Aksi<th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -602,24 +603,27 @@
       } else {
         dataTable = $('#absensiTable').DataTable({
           responsive: true,
-          dom: 'Bfrtip', // <-- Tambahkan ini
-          buttons: ['excel'] // <-- Tambahkan ini
+          dom: 'Bfrtip',
+          buttons: ['excel'] 
         });
       }
 
       data.forEach(row => {
-        dataTable.row.add([
-          `<span class="table-date">${formatDateShort(row.tanggal)}</span>`,
-          `<span class="table-name">${row.nama_guru}</span>`,
-          `<span class="table-nip">${row.nip || '-'}</span>`,
-          `<span class="table-status ${row.status_pegawai.toLowerCase()}">${row.status_pegawai}</span>`,
-          `<span class="table-day">${row.hari}</span>`,
-          `<span class="table-time">${row.jam_masuk || '-'}</span>`,
-          `<span class="table-time">${row.jam_keluar || '-'}</span>`,
-          row.foto_masuk ? `<img src="${row.foto_masuk}" class="table-photo" alt="Foto Masuk ${row.nama_guru}" onclick="showPhotoModal('${row.foto_masuk}', '${row.nama_guru} - Masuk')">` : '<span style="color: rgba(0,0,0,0.3);">-</span>',
-          row.foto_keluar ? `<img src="${row.foto_keluar}" class="table-photo" alt="Foto Keluar ${row.nama_guru}" onclick="showPhotoModal('${row.foto_keluar}', '${row.nama_guru} - Keluar')">` : '<span style="color: rgba(0,0,0,0.3);">-</span>'
-        ]);
-      });
+dataTable.row.add([
+  `<span class="table-date">${formatDateShort(row.tanggal)}</span>`,
+  `<span class="table-name">${row.nama_guru}</span>`,
+  `<span class="table-nip">${row.nip || '-'}</span>`,
+  `<span class="table-status ${row.status_pegawai.toLowerCase()}">${row.status_pegawai}</span>`,
+  `<span class="table-day">${row.hari}</span>`,
+  `<span class="table-time">${row.jam_masuk || '-'}</span>`,
+  `<span class="table-time">${row.jam_keluar || '-'}</span>`,
+  row.foto_masuk ? `<img src="${row.foto_masuk}" class="table-photo" alt="Foto Masuk ${row.nama_guru}" onclick="showPhotoModal('${row.foto_masuk}', '${row.nama_guru} - Masuk')">` : '<span style="color: rgba(0,0,0,0.3);">-</span>',
+  row.foto_keluar ? `<img src="${row.foto_keluar}" class="table-photo" alt="Foto Keluar ${row.nama_guru}" onclick="showPhotoModal('${row.foto_keluar}', '${row.nama_guru} - Keluar')">` : '<span style="color: rgba(0,0,0,0.3);">-</span>',
+  `<button class="btn btn-danger btn-sm" onclick="hapusAbsensi(${row.id})">
+     <i class="fas fa-trash"></i>
+   </button>`
+]);
+});
 
       dataTable.draw();
     }
@@ -681,6 +685,25 @@ $('#exportBtn').click(function () {
       const modal = new bootstrap.Modal(document.getElementById('photoModal'));
       modal.show();
     }
+
+    function hapusAbsensi(id) {
+  if (confirm("Yakin ingin menghapus data ini?")) {
+    $.ajax({
+      url: 'hapus_data.php',
+      method: 'POST',
+      data: { id: id },
+      success: function (res) {
+        if (res == 'OK') {
+          alert('Data berhasil dihapus');
+          loadAbsensi($('#startDate').val(), $('#endDate').val());
+        } else {
+          alert('Gagal menghapus data');
+        }
+      }
+    });
+  }
+}
+
 
     // Make showPhotoModal globally accessible
     window.showPhotoModal = showPhotoModal;

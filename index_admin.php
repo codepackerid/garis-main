@@ -376,25 +376,32 @@
         <!-- Menu Section -->
         <div class="menu-section">
             <div class="menu-grid">
-                <a href="form.php" class="menu-item">
-                    <div class="menu-icon">
-                        <i class="fas fa-edit"></i>
-                    </div>
-                    <div class="menu-text">Isi Buku Tamu</div>
-                </a>
-                
-                <a href="form_guru.php" class="menu-item">
-                    <div class="menu-icon">
-                        <i class="fas fa-user-check"></i>
-                    </div>
-                    <div class="menu-text">Isi Absen Guru</div>
-                </a>
-                
-                <a href="login.php" class="menu-item">
+                <a href="tabel.php" class="menu-item">
                     <div class="menu-icon">
                         <i class="fas fa-table"></i>
                     </div>
-                    <div class="menu-text">Login Admin Page</div>
+                    <div class="menu-text">Lihat Daftar Tamu</div>
+                </a>
+                
+                <a href="daftar_absen.php" class="menu-item">
+                    <div class="menu-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <div class="menu-text">Lihat Daftar Absensi Guru</div>
+                </a>
+
+                <a href="daftar_guru.php" class="menu-item">
+                    <div class="menu-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <div class="menu-text">Lihat Data Guru</div>
+                </a>
+
+                <a href="tambah_guru.php" class="menu-item">
+                    <div class="menu-icon">
+                        <i class="fas fa-table"></i>
+                    </div>
+                    <div class="menu-text">Tambah Data Guru</div>
                 </a>
             </div>
         </div>
